@@ -1,0 +1,18 @@
+Task: Fix Mypy Type Checking Errors in `src/ctrlpy/freq_domain.py`
+
+Context:
+Running `uv run mypy .` produces type incompatibility errors around lines 397-400 where variables typed as `ndarray[..., complex128] | None` are being assigned float arrays or passed into `np.polyval` without type narrowing / None checks.
+
+Instructions:
+1. Open `src/ctrlpy/freq_domain.py` and inspect lines 390-410 (specifically the polynomial evaluation and frequency response calculation logic).
+2. Fix Optional/None Narrowing:
+   - Ensure variables passed to `np.polyval` or array slicing are guarded against `None` with explicit type guards (e.g., `if val is None: ...` or `assert val is not None`).
+3. Fix Dtype/NDArray Typing Mismatches:
+   - Avoid assigning a float ndarray directly to a variable annotated strictly as `complex128`.
+   - Use explicit array conversion where needed (e.g., `.astype(np.complex128)`) or adjust the variable's type hint to allow general numeric array types (`NDArray[np.floating[Any] | np.complexfloating[Any, Any]]` or `NDArray[Any]`).
+4. Ensure all helper function signatures in `freq_domain.py` have precise return and parameter type annotations compliant with `numpy.typing.NDArray`.
+
+Verification:
+- Run `uv run mypy .` and ensure it completes with 0 errors found.
+- Run `uv run pytest` to confirm all unit tests still pass without regressions.
+- Run `uv run ruff check .` to verify clean formatting.
