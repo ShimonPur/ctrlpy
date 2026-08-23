@@ -24,3 +24,6 @@ htmlcov/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+#Prompts helper for agent
+prompts/
