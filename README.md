@@ -1,6 +1,6 @@
 # ctrlpy
 
-[![CI](https://github.com/ctrlpy/ctrlpy/actions/workflows/ci.yml/badge.svg)](https://github.com/ctrlpy/ctrlpy/actions/workflows/ci.yml)
+[![CI](https://github.com/ShimonPur/ctrlpy/actions/workflows/ci.yml/badge.svg)](https://github.com/ShimonPur/ctrlpy/actions/workflows/ci.yml)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -93,12 +93,12 @@ ctrlpy/
 
 Using `uv`:
 ```bash
-uv add ctrlpy
+uv add git+https://github.com/ShimonPur/ctrlpy.git
 ```
 
 Using `pip`:
 ```bash
-pip install ctrlpy
+pip install git+https://github.com/ShimonPur/ctrlpy.git
 ```
 
 ### With Educational / Symbolic Submodule (`ctrlpy.pedagogy`)
@@ -107,12 +107,12 @@ To install `ctrlpy` along with `sympy` for step-by-step pedagogical derivations:
 
 Using `uv`:
 ```bash
-uv add ctrlpy --extra symbolic
+uv add git+https://github.com/ShimonPur/ctrlpy.git --extra symbolic
 ```
 
 Using `pip`:
 ```bash
-pip install "ctrlpy[symbolic]"
+pip install "ctrlpy[symbolic]@git+https://github.com/ShimonPur/ctrlpy.git"
 ```
 
 ### Development & All Extras

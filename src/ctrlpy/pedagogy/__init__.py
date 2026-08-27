@@ -6,9 +6,9 @@ except ImportError:
     raise ImportError(
         "The 'ctrlpy.pedagogy' submodule requires SymPy.\n"
         "Please install it with:\n"
-        '    pip install "ctrlpy[symbolic]"\n'
+        '    pip install "ctrlpy[symbolic]@git+https://github.com/ShimonPur/ctrlpy.git"\n'
         "or with uv:\n"
-        "    uv add ctrlpy --extra symbolic"
+        "    uv add git+https://github.com/ShimonPur/ctrlpy.git --extra symbolic"
     ) from None
 
 from ctrlpy.pedagogy.root_locus_rules import RootLocusRulesResult, root_locus_rules
