@@ -1,6 +1,7 @@
 # ctrlpy
 
 [![CI](https://github.com/ShimonPur/ctrlpy/actions/workflows/ci.yml/badge.svg)](https://github.com/ShimonPur/ctrlpy/actions/workflows/ci.yml)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://ShimonPur.github.io/ctrlpy/)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -40,10 +41,23 @@
   - **Classroom Root Locus Rules** (`root_locus_rules`): Complete step-by-step derivation of branches, real-axis segments, asymptotes ($\sigma_a, \theta_k$), breakaway/break-in points ($dK/ds = 0$), departure/arrival angles, and $j\omega$-crossings.
   - **Steady-State Error Analysis** (`steady_state_analysis`): Automatic System Type ($0, 1, 2\dots$) classification, static constants ($K_p, K_v, K_a$), steady-state errors ($e_{ss}$ for step, ramp, parabola), and closed-loop stability verification.
 - **Jupyter Notebook Integration**:
-  - Native LaTeX formatting (`_repr_latex_`) rendering mathematical fractions, Routh tables, and analytical derivation summaries directly in notebook cells.
+  - Native LaTeX formatting (`_repr_latex_` and `_repr_markdown_`) rendering mathematical fractions, Routh tables, and analytical derivation summaries directly in notebook cells.
 - **Modern Python Standards**:
   - 100% Type-annotated codebase with strict `mypy` validation (`py.typed` included).
   - Clean PEP 8 formatting with `ruff`.
+
+---
+
+## Documentation
+
+The full documentation website includes comprehensive guides, interactive case study notebooks, and auto-generated API references:
+
+- **Online Documentation**: Published on GitHub Pages at [https://ShimonPur.github.io/ctrlpy/](https://ShimonPur.github.io/ctrlpy/).
+- **Local Documentation Server**: To build and serve the documentation locally with live-reloading:
+  ```bash
+  uv run mkdocs serve
+  ```
+  Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
 
 ---
 
@@ -53,7 +67,9 @@
 ctrlpy/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml             # GitHub Actions CI matrix (Python 3.10, 3.11, 3.12)
+│       ├── ci.yml             # GitHub Actions CI matrix (Python 3.10, 3.11, 3.12)
+│       └── docs.yml           # GitHub Pages automated deployment workflow
+├── docs/                      # MkDocs Material documentation source & API stubs
 ├── notebooks/
 │   ├── 01_quickstart.ipynb                     # LTI modeling, interconnections, and plotting
 │   ├── 02_dc_motor_control.ipynb               # DC motor speed control & PI design
@@ -79,6 +95,7 @@ ctrlpy/
 │       ├── simulation_results.py # Typed TimeResponseData container & metric extraction
 │       └── time_domain.py     # Vectorized step, impulse, and forced response solvers
 ├── tests/                     # Comprehensive test suite (>90% coverage)
+├── mkdocs.yml                 # MkDocs configuration with MathJax 3 & Material theme
 ├── pyproject.toml             # Packaging metadata, dependencies, and tool configs
 └── README.md
 ```

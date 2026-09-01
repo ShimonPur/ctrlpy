@@ -21,9 +21,16 @@ htmlcov/
 # Type checking & Linting
 .mypy_cache/
 .ruff_cache/
+.cache/
+
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-#Prompts helper for agent
+# MkDocs build directory
+site/
+
+# Prompts helper for agent
 prompts/
+.prompts/
+

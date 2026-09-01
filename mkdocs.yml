@@ -1,0 +1,105 @@
+site_name: ctrlpy
+site_description: Modern, high-performance Python control systems library built on NumPy, SciPy, and Plotly
+site_author: Shimon Israelpur
+site_url: https://ShimonPur.github.io/ctrlpy/
+repo_name: ShimonPur/ctrlpy
+repo_url: https://github.com/ShimonPur/ctrlpy
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocs-jupyter:
+      include_source: true
+      ignore_h1_titles: true
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: numpy
+            docstring_section_style: table
+            show_root_heading: true
+            show_root_toc_entry: true
+            show_root_full_path: false
+            show_source: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            members_order: source
+            separate_signature: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Tutorials:
+      - 01. Quickstart Guide: tutorials/01_quickstart.ipynb
+      - 02. DC Motor Speed Control: tutorials/02_dc_motor_control.ipynb
+      - 03. Mass-Spring-Damper PID Tuning: tutorials/03_mass_spring_damper.ipynb
+      - 04. Frequency Domain & Stability Margins: tutorials/04_frequency_domain_deep_dive.ipynb
+      - 05. Pedagogical & Symbolic Control Tools: tutorials/05_pedagogical_and_symbolic_tools.ipynb
+  - API Reference:
+      - Overview: api/index.md
+      - LTI Models: api/models.md
+      - Block Diagram Algebra: api/algebra.md
+      - Time-Domain Simulation: api/time_domain.md
+      - Frequency-Domain Analysis: api/freq_domain.md
+      - Controllers & Tuning: api/controllers.md
+      - Visualization Engine: api/plotting.md
+      - Pedagogical Tools: api/pedagogy.md
+      - Exceptions: api/exceptions.md
+
