@@ -89,7 +89,13 @@ def step_response(
     X0: Sequence[float] | NDArray[np.floating] | None = None,
     input_index: int = 0,
 ) -> TimeResponseData:
-    """Compute the step response of a continuous-time LTI system.
+    r"""Compute the step response of a continuous-time LTI system.
+
+    Simulates the system output trajectory for a unit step excitation:
+
+    .. math::
+
+        u(t) = 1(t) = \begin{cases} 1, & t \ge 0 \\ 0, & t < 0 \end{cases}
 
     Parameters
     ----------
@@ -172,7 +178,13 @@ def impulse_response(
     X0: Sequence[float] | NDArray[np.floating] | None = None,
     input_index: int = 0,
 ) -> TimeResponseData:
-    """Compute the impulse response of a continuous-time LTI system.
+    r"""Compute the impulse response of a continuous-time LTI system.
+
+    Simulates the system output trajectory for a Dirac delta excitation:
+
+    .. math::
+
+        u(t) = \delta(t) \implies y(t) = g(t) = \mathcal{L}^{-1}\{G(s)\}
 
     Parameters
     ----------
@@ -254,7 +266,7 @@ def forced_response(
     U: Sequence[float] | NDArray[np.floating] | float | np.number[Any],
     X0: Sequence[float] | NDArray[np.floating] | None = None,
 ) -> TimeResponseData:
-    """Compute the simulation response of an LTI system to arbitrary inputs U(t).
+    r"""Compute the simulation response of an LTI system to arbitrary inputs $u(t)$.
 
     Parameters
     ----------
@@ -263,10 +275,11 @@ def forced_response(
     T : Sequence[float] | NDArray[np.floating]
         Simulation time points (1D array).
     U : Sequence[float] | NDArray[np.floating] | float | int
-        Input signal over time. For SISO systems, a 1D array of length `len(T)` or a scalar.
+        Input signal $u(t)$ over time. For SISO systems, a 1D array of length `len(T)` or a scalar.
         For MIMO systems, a 2D array of shape `(len(T), inputs)`.
     X0 : Sequence[float] | NDArray[np.floating] | None, optional
-        Initial state vector (only valid for StateSpace systems).
+        Initial state vector $x(0)$ (only valid for StateSpace systems).
+
 
     Returns
     -------

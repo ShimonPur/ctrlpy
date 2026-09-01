@@ -415,3 +415,15 @@ class TestMixedArithmeticAndEdgeCases:
         assert isinstance(div_tf_scalar, TransferFunction)
         div_scalar_tf = 2.0 / g
         assert isinstance(div_scalar_tf, TransferFunction)
+
+    def test_repr_latex_and_markdown(self) -> None:
+        """Test _repr_latex_ and _repr_markdown_ for TF and SS."""
+        g = tf([1], [1, 2, 1])
+        s = ss([[-2]], [[1]], [[1]], [[0]])
+
+        assert "$$" in g._repr_latex_()
+        assert g._repr_markdown_() == g._repr_latex_()
+        assert "bmatrix" in s._repr_latex_()
+        assert s._repr_markdown_() == s._repr_latex_()
+        assert "TransferFunction" in repr(g)
+        assert "StateSpace" in repr(s)

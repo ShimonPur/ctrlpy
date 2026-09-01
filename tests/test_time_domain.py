@@ -478,3 +478,17 @@ class TestValidationAndErrors:
 
         with pytest.raises(ValueError, match="must be 1D or 2D"):
             forced_response(sys_miso, T=t, U=np.ones((2, 50, 2)))
+
+    def test_time_response_data_repr(self) -> None:
+        """Test _repr_latex_ and _repr_markdown_ on TimeResponseData."""
+        sys = tf([1], [1, 2, 1])
+        res = step_response(sys, T=10.0)
+
+        assert "$$" in res._repr_latex_()
+        assert res._repr_markdown_() == res._repr_latex_()
+
+        # Unstable system representation
+        sys_unstable = tf([1], [1, -2])
+        res_unstable = step_response(sys_unstable, T=2.0)
+        assert "Unstable" in res_unstable._repr_latex_()
+        assert "$$" in res_unstable._repr_markdown_()

@@ -93,6 +93,10 @@ class RouthResult:
         latex_str += r"\end{aligned}"
         return latex_str
 
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return f"$${self._repr_latex_()}$$"
+
     def __str__(self) -> str:
         """Format a human-readable ASCII representation of the Routh table."""
         lines = ["=== Routh-Hurwitz Stability Criterion ==="]

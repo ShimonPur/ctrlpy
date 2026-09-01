@@ -1,0 +1,40 @@
+Task: Extract and Synthesize a Reusable Engineering Library Creation Skill/Blueprint.
+
+Context:
+We have successfully developed `ctrlpy` across multiple development phases (Architecture, Models, Simulation, DX, CI/CD, Documentation, and Pedagogical Submodules). 
+I want to establish a standardized, reusable blueprint for creating future Python scientific and electrical engineering libraries (e.g., DSP, RF, Communications, Circuit Simulation).
+
+Objective:
+Create a comprehensive, structured markdown document at the root of the project named `SCIENTIFIC_LIBRARY_SKILL.md`.
+
+The document must formalize our proven methodology into distinct, actionable rules:
+
+1. Architectural Core Principles:
+   - Modern `src/<package_name>/` layout.
+   - Strict separation between fast numerical calculation engines (NumPy, SciPy) and symbolic/pedagogical submodules (SymPy).
+   - Dual-backend visualization design (Matplotlib static + Plotly interactive tooltips/hover).
+   - Rich mathematical rendering (`_repr_latex_` and `_repr_markdown_`) for Jupyter and IDE environments.
+
+2. Packaging, Dependency & Environment Standards:
+   - PEP 517/621 packaging with `pyproject.toml` and `hatchling`.
+   - Virtual environment and fast package management via `uv`.
+   - Clean separation of dependencies: core runtime, optional feature extras (`[project.optional-dependencies]`), and developer tools (`dev`).
+   - Standardized `.gitignore` and `__all__` exports in `__init__.py`.
+
+3. Code Quality & Typing Rigor:
+   - Python 3.10+ typing standards (Generic aliases, `TypeAlias`, `Literal`, `overload`).
+   - Linting & formatting: Ruff configured with line-length 100 and clean import sorting.
+   - Static analysis: Strict Mypy configuration (`strict = true`, `ignore_missing_imports = true` for C-extensions/SciPy).
+   - Docstrings: Clean NumPy style docstrings detailing parameters, mathematical equations in LaTeX, and returns.
+
+4. Testing, Coverage & CI/CD Strategy:
+   - Test suite structure: unit tests, mathematical property validations, numerical convergence/edge-case tests.
+   - Pytest configurations with `--cov` and term-missing reporting.
+   - Multi-platform, multi-version GitHub Actions matrix (`ubuntu-latest`, Python 3.10-3.12).
+
+5. Developer Experience (DX) & Pedagogical Design:
+   - Fluent / Object-Oriented APIs: direct instance convenience methods (`sys.plot_*`, `sys.iplot_*`).
+   - Clear distinction between "Black-box numerical speed" and "Step-by-step classroom derivation tools".
+   - Educational notebooks hierarchy: Quickstart $\to$ Real-world physical case studies $\to$ Deep-dive analysis $\to$ Symbolic derivations.
+
+Please write `SCIENTIFIC_LIBRARY_SKILL.md` directly into the workspace root.

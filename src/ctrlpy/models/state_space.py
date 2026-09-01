@@ -36,26 +36,34 @@ def _matrix_to_latex(mat: NDArray[np.float64]) -> str:
 
 
 class StateSpace(LinearTimeInvariant):
-    """Continuous-time Linear Time-Invariant State-Space representation.
+    r"""Continuous-time Linear Time-Invariant State-Space representation.
 
-    Represents systems of the form:
-        dx/dt = A x + B u
-            y = C x + D u
+    Represents dynamic systems in continuous-time state-space form:
+
+    .. math::
+
+        \begin{aligned}
+        \dot{x}(t) &= A x(t) + B u(t) \\
+        y(t) &= C x(t) + D u(t)
+        \end{aligned}
+
+    where $x(t) \in \mathbb{R}^n$ is the state vector, $u(t) \in \mathbb{R}^m$ is the input vector,
+    and $y(t) \in \mathbb{R}^p$ is the output vector.
 
     Parameters
     ----------
     A : ArrayLike
-        State transition matrix (n x n).
+        State transition matrix $A \in \mathbb{R}^{n \times n}$.
     B : ArrayLike
-        Input matrix (n x m).
+        Input matrix $B \in \mathbb{R}^{n \times m}$.
     C : ArrayLike
-        Output matrix (p x n).
+        Output matrix $C \in \mathbb{R}^{p \times n}$.
     D : ArrayLike
-        Direct feedthrough matrix (p x m).
+        Direct feedthrough matrix $D \in \mathbb{R}^{p \times m}$.
 
     Raises
     ------
-    ValueError
+    DimensionMismatchError
         If matrix dimensions are incompatible.
     """
 
@@ -523,6 +531,10 @@ class StateSpace(LinearTimeInvariant):
             rf"y &= {c_tex} x + {d_tex} u "
             r"\end{aligned}$$"
         )
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
 
 
 # Convenient alias

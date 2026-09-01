@@ -106,7 +106,11 @@ class TimeResponseData:
                 )
 
     def steady_state_value(self, channel: int = 0) -> float:
-        """Compute the final steady-state response value.
+        r"""Compute the final steady-state response value $y_{ss}$.
+
+        .. math::
+
+            y_{ss} = \lim_{t \to \infty} y(t) \approx y(t_{\text{final}})
 
         Parameters
         ----------
@@ -121,7 +125,7 @@ class TimeResponseData:
         Raises
         ------
         UnstableSystemError
-            If the system is unstable (has poles with Re(p) > 0).
+            If the system is unstable (has poles with $\mathrm{Re}(p) > 0$).
         """
         self._check_stability()
         y_vec = self._get_channel_1d(channel)
@@ -133,10 +137,14 @@ class TimeResponseData:
         high: float = 0.9,
         channel: int = 0,
     ) -> float:
-        """Compute the rise time from low% to high% of the steady-state transition.
+        r"""Compute the rise time $t_r$ from low% to high% of the steady-state transition.
 
         By default, computes the 10% to 90% rise time with linear interpolation
-        between discrete time points for high numerical accuracy.
+        between discrete time points for high numerical accuracy:
+
+        .. math::
+
+            t_r = t_{90\%} - t_{10\%}
 
         Parameters
         ----------
@@ -155,7 +163,7 @@ class TimeResponseData:
         Raises
         ------
         UnstableSystemError
-            If the system is unstable (has poles with Re(p) > 0).
+            If the system is unstable (has poles with $\mathrm{Re}(p) > 0$).
         """
         self._check_stability()
         y_vec = self._get_channel_1d(channel)
@@ -203,11 +211,16 @@ class TimeResponseData:
         tolerance: float = 0.02,
         channel: int = 0,
     ) -> float:
-        """Compute the settling time within a specified tolerance band around steady-state.
+        r"""Compute the settling time $t_s$ within a specified tolerance band around steady-state.
 
         Settling time is the time after which the response remains permanently within
-        the error band `[yss - tolerance * |yss - y0|, yss + tolerance * |yss - y0|]`.
-        The boundary crossing is linearly interpolated for precision.
+        the error band:
+
+        .. math::
+
+            |y(t) - y_{ss}| \le \text{tolerance} \cdot |y_{ss} - y_0|, \quad \forall t \ge t_s
+
+        The boundary crossing is linearly interpolated for sub-sample precision.
 
         Parameters
         ----------
@@ -225,7 +238,7 @@ class TimeResponseData:
         Raises
         ------
         UnstableSystemError
-            If the system is unstable (has poles with Re(p) > 0).
+            If the system is unstable (has poles with $\mathrm{Re}(p) > 0$).
         """
         self._check_stability()
         y_vec = self._get_channel_1d(channel)
@@ -260,7 +273,11 @@ class TimeResponseData:
         return float(t_next)
 
     def overshoot(self, channel: int = 0) -> float:
-        """Compute the maximum percent overshoot above steady-state.
+        r"""Compute the maximum percent overshoot $\%OS$ above steady-state.
+
+        .. math::
+
+            \%OS = \frac{y_{\text{peak}} - y_{ss}}{|y_{ss} - y_0|} \times 100\%
 
         Parameters
         ----------
@@ -276,7 +293,7 @@ class TimeResponseData:
         Raises
         ------
         UnstableSystemError
-            If the system is unstable (has poles with Re(p) > 0).
+            If the system is unstable (has poles with $\mathrm{Re}(p) > 0$).
         """
         self._check_stability()
         y_vec = self._get_channel_1d(channel)
@@ -299,7 +316,11 @@ class TimeResponseData:
             return float(((yss - y_peak) / abs(dy)) * 100.0)
 
     def peak_time(self, channel: int = 0) -> float:
-        """Compute the time at which the maximum peak response occurs.
+        r"""Compute the time $t_p$ at which the maximum peak response occurs.
+
+        .. math::
+
+            t_p = \arg\max_t |y(t) - y_0|
 
         Parameters
         ----------
@@ -314,7 +335,7 @@ class TimeResponseData:
         Raises
         ------
         UnstableSystemError
-            If the system is unstable (has poles with Re(p) > 0).
+            If the system is unstable (has poles with $\mathrm{Re}(p) > 0$).
         """
         self._check_stability()
         y_vec = self._get_channel_1d(channel)
@@ -329,3 +350,43 @@ class TimeResponseData:
             k = int(np.argmin(y_vec))
 
         return float(t_vec[k])
+
+    def _repr_latex_(self) -> str:
+        """Return a LaTeX table of transient response performance metrics for Jupyter."""
+        try:
+            yss_val = self.steady_state_value()
+            yss_str = f"{yss_val:.4f}"
+            tr_val = self.rise_time()
+            tr_str = f"{tr_val:.4f}\\text{{ s}}" if not np.isnan(tr_val) else r"\text{N/A}"
+            ts_val = self.settling_time(tolerance=0.02)
+            ts_str = f"{ts_val:.4f}\\text{{ s}}" if not np.isnan(ts_val) else r"\text{N/A}"
+            os_val = self.overshoot()
+            os_str = f"{os_val:.2f}\\%"
+            tp_val = self.peak_time()
+            tp_str = f"{tp_val:.4f}\\text{{ s}}"
+        except UnstableSystemError:
+            return r"$$\textbf{\textcolor{red}{Unstable System: Transient metrics not applicable (divergent response)}}$$"
+        except (ValueError, IndexError, RuntimeError, TypeError):
+            final_y = self.y[-1] if self.y.ndim == 1 else self.y[-1, 0]
+            return (
+                rf"$$\text{{TimeResponseData: {len(self.t)} points, final value: {final_y:.4f}}}$$"
+            )
+
+        lines = [
+            r"$$\begin{array}{|l|c|}",
+            r"\hline",
+            r"\textbf{Transient Response Metric} & \textbf{Value} \\",
+            r"\hline",
+            rf"\text{{Steady-State Value }} (y_{{ss}}) & {yss_str} \\",
+            rf"\text{{Rise Time }} (t_r, 10\%-90\%) & {tr_str} \\",
+            rf"\text{{Settling Time }} (t_s, 2\%) & {ts_str} \\",
+            rf"\text{{Percent Overshoot }} (\%OS) & {os_str} \\",
+            rf"\text{{Peak Time }} (t_p) & {tp_str} \\",
+            r"\hline",
+            r"\end{array}$$",
+        ]
+        return "\n".join(lines)
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()

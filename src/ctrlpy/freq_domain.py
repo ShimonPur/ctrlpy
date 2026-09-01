@@ -54,6 +54,17 @@ class BodeData:
         yield self.mag
         yield self.phase
 
+    def _repr_latex_(self) -> str:
+        """Return a LaTeX representation for Jupyter environments."""
+        return (
+            rf"$$\text{{BodeData: }} {len(self.w)}\text{{ frequency points from }} "
+            rf"\omega = {self.w[0]:.3g}\text{{ to }} {self.w[-1]:.3g}\text{{ rad/s}}$$"
+        )
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
+
 
 @dataclass
 class NyquistData:
@@ -93,6 +104,22 @@ class NyquistData:
         yield self.w
         yield self.response
 
+    def _repr_latex_(self) -> str:
+        """Return a LaTeX representation for Jupyter environments."""
+        arc_info = (
+            rf",\text{{ indented arc: }} {len(self.arc_s)}\text{{ points}}"
+            if self.arc_s is not None
+            else ""
+        )
+        return (
+            rf"$$\text{{NyquistData: }} {len(self.w)}\text{{ frequency points}}"
+            rf"{arc_info}$$"
+        )
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
+
 
 @dataclass
 class RootLocusData:
@@ -125,6 +152,18 @@ class RootLocusData:
         """
         yield self.gains
         yield self.roots
+
+    def _repr_latex_(self) -> str:
+        """Return a LaTeX representation for Jupyter environments."""
+        return (
+            rf"$$\text{{RootLocusData: }} {len(self.gains)}\text{{ gains, }} "
+            rf"{len(self.poles)}\text{{ open-loop poles, }} "
+            rf"{len(self.zeros)}\text{{ open-loop zeros}}$$"
+        )
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
 
 
 @dataclass
@@ -180,6 +219,37 @@ class StabilityMargins:
         yield self.pm_deg
         yield self.wcg
         yield self.wcp
+
+    def _repr_latex_(self) -> str:
+        """Return a LaTeX representation for Jupyter environments."""
+        gm_str = (
+            f"{self.gm_db:.2f}\\text{{ dB}}" if not np.isinf(self.gm_db) else r"\infty\text{ dB}"
+        )
+        pm_str = (
+            f"{self.pm_deg:.2f}^\\circ"
+            if (not np.isinf(self.pm_deg) and not np.isnan(self.pm_deg))
+            else (r"\infty" if np.isinf(self.pm_deg) else r"\text{N/A}")
+        )
+        wcg_str = f"{self.wcg:.4g}\\text{{ rad/s}}" if not np.isnan(self.wcg) else r"\text{N/A}"
+        wcp_str = f"{self.wcp:.4g}\\text{{ rad/s}}" if not np.isnan(self.wcp) else r"\text{N/A}"
+
+        lines = [
+            r"$$\begin{array}{|l|c|}",
+            r"\hline",
+            r"\textbf{Stability Margin / Crossover Frequency} & \textbf{Value} \\",
+            r"\hline",
+            rf"\text{{Gain Margin }} (\mathrm{{GM}}) & {gm_str} \\",
+            rf"\text{{Phase Margin }} (\mathrm{{PM}}) & {pm_str} \\",
+            rf"\text{{Gain Crossover Frequency }} (\omega_{{cg}}) & {wcg_str} \\",
+            rf"\text{{Phase Crossover Frequency }} (\omega_{{cp}}) & {wcp_str} \\",
+            r"\hline",
+            r"\end{array}$$",
+        ]
+        return "\n".join(lines)
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
 
 
 def _generate_omega(
@@ -313,21 +383,33 @@ def bode_data(
     sys: LinearTimeInvariant,
     omega: Sequence[float] | NDArray[np.floating] | None = None,
 ) -> BodeData:
-    """Calculate frequency response data for Bode diagram analysis.
+    r"""Calculate frequency response data for Bode diagram analysis.
+
+    Evaluates the frequency response:
+
+    .. math::
+
+        G(j\omega) = |G(j\omega)| e^{j \angle G(j\omega)}
+
+    where magnitude in decibels is:
+
+    .. math::
+
+        |G(j\omega)|_{\text{dB}} = 20 \log_{10} |G(j\omega)|
 
     Parameters
     ----------
     sys : LinearTimeInvariant
         Linear Time-Invariant system (TransferFunction or StateSpace).
     omega : Sequence[float] | NDArray[np.floating] | None, optional
-        Frequencies in rad/s. If None, auto-generated based on poles and zeros.
+        Frequencies $\omega$ in rad/s. If None, auto-generated based on poles and zeros.
 
     Returns
     -------
     BodeData
-        Dataclass containing frequencies w, linear magnitude mag,
+        Dataclass containing frequencies $\omega$, linear magnitude $|G(j\omega)|$,
         unwrapped phase in degrees, magnitude in dB, phase in radians,
-        and complex response.
+        and complex response $G(j\omega)$.
     """
     w = _generate_omega(sys, omega)
     _, resp = _evaluate_siso_freqresp(sys, w)
@@ -354,23 +436,26 @@ def nyquist_data(
     omega: Sequence[float] | NDArray[np.floating] | None = None,
     n_arc_points: int = 100,
 ) -> NyquistData:
-    """Calculate complex frequency response data for Nyquist diagram analysis.
+    r"""Calculate complex frequency response data for Nyquist diagram analysis.
+
+    Evaluates $G(j\omega)$ along the imaginary axis and optionally around
+    indented arcs $s = \epsilon e^{j\theta}$ ($\theta \in [-\pi/2, \pi/2]$) for poles at $s=0$.
 
     Parameters
     ----------
     sys : LinearTimeInvariant
         Linear Time-Invariant system (TransferFunction or StateSpace).
     omega : Sequence[float] | NDArray[np.floating] | None, optional
-        Frequencies in rad/s. If None, auto-generated based on poles and zeros.
+        Frequencies $\omega$ in rad/s. If None, auto-generated based on poles and zeros.
     n_arc_points : int, optional
-        Number of points to evaluate along the indented D-contour around s=0
+        Number of points to evaluate along the indented D-contour around $s=0$
         when an origin pole is present, by default 100.
 
     Returns
     -------
     NyquistData
-        Dataclass containing frequencies w, complex frequency response G(jw),
-        real part Re(G(jw)), imaginary part Im(G(jw)), and indented arc data if applicable.
+        Dataclass containing frequencies $\omega$, complex frequency response $G(j\omega)$,
+        real part $\mathrm{Re}(G(j\omega))$, imaginary part $\mathrm{Im}(G(j\omega))$, and indented arc data if applicable.
     """
     w = _generate_omega(sys, omega)
     tf_sys, resp = _evaluate_siso_freqresp(sys, w)
@@ -406,21 +491,25 @@ def root_locus_data(
     sys: LinearTimeInvariant,
     gains: Sequence[float] | NDArray[np.floating] | None = None,
 ) -> RootLocusData:
-    """Calculate closed-loop root locus trajectories for varying gains k >= 0.
+    r"""Calculate closed-loop root locus trajectories for varying gains $k \ge 0$.
 
-    Computes the roots of 1 + k * G(s) = 0 for varying feedback gains k >= 0.
+    Computes the roots of the characteristic equation:
+
+    .. math::
+
+        1 + k \cdot G(s) = 0 \iff D(s) + k \cdot N(s) = 0
 
     Parameters
     ----------
     sys : LinearTimeInvariant
-        Open-loop SISO LTI system.
+        Open-loop SISO LTI system $G(s) = N(s)/D(s)$.
     gains : Sequence[float] | NDArray[np.floating] | None, optional
-        1D array of non-negative gain values k. If None, automatically generated.
+        1D array of non-negative gain values $k \ge 0$. If None, automatically generated.
 
     Returns
     -------
     RootLocusData
-        Dataclass containing gains, 2D roots array of shape (n_gains, n_poles),
+        Dataclass containing gains, 2D roots array of shape `(n_gains, n_poles)`,
         open-loop poles, and open-loop zeros.
 
     Raises
@@ -508,21 +597,29 @@ def root_locus_data(
 
 
 def margin(sys: LinearTimeInvariant) -> StabilityMargins:
-    """Compute gain margin, phase margin, and crossover frequencies for a SISO system.
+    r"""Compute gain margin, phase margin, and crossover frequencies for a SISO system.
+
+    .. math::
+
+        \text{GM} = -20 \log_{10} |G(j\omega_{cp})| \text{ dB}, \quad \angle G(j\omega_{cp}) = -180^\circ
+
+    .. math::
+
+        \text{PM} = 180^\circ + \angle G(j\omega_{cg}), \quad |G(j\omega_{cg})| = 1 \text{ (0 dB)}
 
     Parameters
     ----------
     sys : LinearTimeInvariant
-        Open-loop SISO LTI system.
+        Open-loop SISO LTI system $G(s)$.
 
     Returns
     -------
     StabilityMargins
         Dataclass containing:
-        - gm_db : Gain Margin in dB (inf if phase never reaches -180 deg)
-        - pm_deg : Phase Margin in degrees (inf if magnitude never reaches 0 dB)
-        - wcg : Gain Crossover Frequency in rad/s (where |G(jw)| = 1)
-        - wcp : Phase Crossover Frequency in rad/s (where phase crosses -180 deg)
+        - `gm_db` : Gain Margin $\mathrm{GM}$ in dB ($\infty$ if phase never crosses $-180^\circ$)
+        - `pm_deg` : Phase Margin $\mathrm{PM}$ in degrees ($\infty$ if magnitude never crosses $0\text{ dB}$)
+        - `wcg` : Gain Crossover Frequency $\omega_{cg}$ in rad/s (where $|G(j\omega)| = 1$)
+        - `wcp` : Phase Crossover Frequency $\omega_{cp}$ in rad/s (where $\angle G(j\omega) = -180^\circ$)
     """
     if not isinstance(sys, LinearTimeInvariant):
         raise TypeError(f"Expected LinearTimeInvariant instance, got {type(sys).__name__}.")

@@ -13,10 +13,19 @@ from ctrlpy.models.transfer_function import TransferFunction
 def series(
     *systems: LinearTimeInvariant | float | np.number[Any],
 ) -> LinearTimeInvariant:
-    """Connect two or more systems in series (cascade).
+    r"""Connect two or more systems in series (cascade).
 
     The output of each system is connected to the input of the next system:
-    u -> systems[0] -> systems[1] -> ... -> systems[n-1] -> y
+
+    .. math::
+
+        u \longrightarrow G_1(s) \longrightarrow G_2(s) \longrightarrow \cdots \longrightarrow G_n(s) \longrightarrow y
+
+    The equivalent transfer function is the product of individual blocks:
+
+    .. math::
+
+        G_{\text{total}}(s) = G_n(s) \cdots G_2(s) G_1(s)
 
     Parameters
     ----------
@@ -52,10 +61,19 @@ def series(
 def parallel(
     *systems: LinearTimeInvariant | float | np.number[Any],
 ) -> LinearTimeInvariant:
-    """Connect two or more systems in parallel.
+    r"""Connect two or more systems in parallel.
 
     Inputs are connected together and outputs are summed:
-    y = systems[0](u) + systems[1](u) + ... + systems[n-1](u)
+
+    .. math::
+
+        y(t) = \sum_{i=1}^n y_i(t)
+
+    The equivalent transfer function is the sum of individual blocks:
+
+    .. math::
+
+        G_{\text{total}}(s) = G_1(s) + G_2(s) + \cdots + G_n(s)
 
     Parameters
     ----------
@@ -92,27 +110,39 @@ def feedback(
     sys2: LinearTimeInvariant | float | np.number[Any] = 1,
     sign: float = -1,
 ) -> LinearTimeInvariant:
-    """Connect two systems in a closed-loop feedback interconnection.
+    r"""Connect two systems in a closed-loop feedback interconnection.
 
-    The closed-loop system relates reference r to output y:
-    e = r + sign * sys2(y)
-    y = sys1(e)
+    The closed-loop system relates reference $r(t)$ to output $y(t)$:
 
-    Closed-loop transfer function: T = sys1 / (1 - sign * sys1 * sys2)
+    .. math::
+
+        e(t) = r(t) + \text{sign} \cdot (H y)(t), \quad y(t) = (G e)(t)
+
+    The closed-loop transfer function is given by:
+
+    .. math::
+
+        T(s) = \frac{G(s)}{1 - \text{sign} \cdot G(s) H(s)}
+
+    For standard negative feedback ($\text{sign} = -1$):
+
+    .. math::
+
+        T(s) = \frac{G(s)}{1 + G(s) H(s)}
 
     Parameters
     ----------
     sys1 : LinearTimeInvariant | float | int | np.number
-        Forward path system G.
+        Forward path system $G(s)$.
     sys2 : LinearTimeInvariant | float | int | np.number, optional
-        Feedback path system H, defaults to 1 (unity feedback).
+        Feedback path system $H(s)$, defaults to 1 (unity feedback).
     sign : int | float, optional
         Feedback sign. Defaults to -1 for standard negative feedback.
 
     Returns
     -------
     LinearTimeInvariant
-        Closed-loop system.
+        Closed-loop system $T(s)$.
     """
     sys1_obj: LinearTimeInvariant = (
         sys1 if isinstance(sys1, LinearTimeInvariant) else TransferFunction(float(sys1), 1.0)

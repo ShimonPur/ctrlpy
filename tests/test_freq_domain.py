@@ -441,3 +441,23 @@ class TestPlottingFunctions:
 
         assert isinstance(fig, Figure)
         assert isinstance(ax, Axes)
+
+    def test_dataclass_reprs(self) -> None:
+        """Test _repr_latex_ and _repr_markdown_ on frequency-domain dataclasses."""
+        sys = tf([2.0], [1.0, 2.0, 2.0])
+        bdata = bode_data(sys)
+        ndata = nyquist_data(sys)
+        rldata = root_locus_data(sys)
+        sm = margin(sys)
+
+        assert "$$" in bdata._repr_latex_()
+        assert bdata._repr_markdown_() == bdata._repr_latex_()
+
+        assert "$$" in ndata._repr_latex_()
+        assert ndata._repr_markdown_() == ndata._repr_latex_()
+
+        assert "$$" in rldata._repr_latex_()
+        assert rldata._repr_markdown_() == rldata._repr_latex_()
+
+        assert "$$" in sm._repr_latex_()
+        assert sm._repr_markdown_() == sm._repr_latex_()

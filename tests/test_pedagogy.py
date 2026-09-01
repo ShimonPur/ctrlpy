@@ -97,6 +97,9 @@ class TestRouthHurwitz:
         latex_output = res._repr_latex_()
         assert r"\begin{array}" in latex_output
         assert "Strictly Stable" in latex_output
+        md_output = res._repr_markdown_()
+        assert "$$" in md_output
+        assert len(str(res)) > 0
 
         str_output = str(res)
         assert "Routh-Hurwitz" in str_output
@@ -176,6 +179,7 @@ class TestRootLocusRules:
         latex_str = res._repr_latex_()
         assert r"\textbf{Rule 1" in latex_str
         assert r"\sigma_a" in latex_str
+        assert "$$" in res._repr_markdown_()
 
         text_str = str(res)
         assert "Analytical Root Locus Rules" in text_str
@@ -238,6 +242,7 @@ class TestSteadyState:
         assert r"\textbf{System Classification:}" in latex_str
         assert "Type 1" in latex_str
         assert "K_v = 5" in latex_str
+        assert "$$" in res._repr_markdown_()
 
         text_str = str(res)
         assert "Steady-State Error Analysis" in text_str

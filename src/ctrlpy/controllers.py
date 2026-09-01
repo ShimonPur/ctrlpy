@@ -118,20 +118,24 @@ def pid(
     Tf: float = 0.0,
     N: float | None = None,
 ) -> TransferFunction:
-    """Convenience alias for PID controller constructor.
+    r"""Construct a continuous-time PID controller as a TransferFunction.
+
+    .. math::
+
+        C(s) = K_p + \frac{K_i}{s} + \frac{K_d s}{T_f s + 1}
 
     Parameters
     ----------
     Kp : float, optional
-        Proportional gain, default is 1.0.
+        Proportional gain $K_p$, default is 1.0.
     Ki : float, optional
-        Integral gain, default is 0.0.
+        Integral gain $K_i$, default is 0.0.
     Kd : float, optional
-        Derivative gain, default is 0.0.
+        Derivative gain $K_d$, default is 0.0.
     Tf : float, optional
-        Derivative filter time constant, default is 0.0.
+        Derivative filter time constant $T_f \ge 0$, default is 0.0.
     N : float | None, optional
-        Derivative filter coefficient, default is None.
+        Derivative filter coefficient $N > 0$, default is None.
 
     Returns
     -------
@@ -142,14 +146,18 @@ def pid(
 
 
 def pi(Kp: float = 1.0, Ki: float = 0.0) -> TransferFunction:
-    """Construct a continuous-time Proportional-Integral (PI) controller.
+    r"""Construct a continuous-time Proportional-Integral (PI) controller.
+
+    .. math::
+
+        C(s) = K_p + \frac{K_i}{s} = \frac{K_p s + K_i}{s}
 
     Parameters
     ----------
     Kp : float, optional
-        Proportional gain, default is 1.0.
+        Proportional gain $K_p$, default is 1.0.
     Ki : float, optional
-        Integral gain, default is 0.0.
+        Integral gain $K_i$, default is 0.0.
 
     Returns
     -------
@@ -165,18 +173,22 @@ def pd(
     Tf: float = 0.0,
     N: float | None = None,
 ) -> TransferFunction:
-    """Construct a continuous-time Proportional-Derivative (PD) controller.
+    r"""Construct a continuous-time Proportional-Derivative (PD) controller.
+
+    .. math::
+
+        C(s) = K_p + \frac{K_d s}{T_f s + 1}
 
     Parameters
     ----------
     Kp : float, optional
-        Proportional gain, default is 1.0.
+        Proportional gain $K_p$, default is 1.0.
     Kd : float, optional
-        Derivative gain, default is 0.0.
+        Derivative gain $K_d$, default is 0.0.
     Tf : float, optional
-        Derivative filter time constant, default is 0.0.
+        Derivative filter time constant $T_f \ge 0$, default is 0.0.
     N : float | None, optional
-        Derivative filter coefficient, default is None.
+        Derivative filter coefficient $N > 0$, default is None.
 
     Returns
     -------

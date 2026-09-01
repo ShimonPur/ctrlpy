@@ -118,15 +118,21 @@ def _format_poly_latex(coeffs: NDArray[np.float64], var: str = "s") -> str:
 
 
 class TransferFunction(LinearTimeInvariant):
-    """Continuous-time Linear Time-Invariant Transfer Function representation.
+    r"""Continuous-time Linear Time-Invariant Transfer Function representation.
+
+    Represents a rational polynomial transfer function in Laplace variable $s$:
+
+    .. math::
+
+        G(s) = \frac{N(s)}{D(s)} = \frac{b_m s^m + b_{m-1} s^{m-1} + \cdots + b_1 s + b_0}{a_n s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0}
 
     Parameters
     ----------
     num : Sequence[float] | NDArray[np.floating] | float
-        Numerator polynomial coefficients in descending powers of s.
+        Numerator polynomial coefficients $N(s)$ in descending powers of $s$.
     den : Sequence[float] | NDArray[np.floating] | float, optional
-        Denominator polynomial coefficients in descending powers of s.
-        Defaults to (1.0,).
+        Denominator polynomial coefficients $D(s)$ in descending powers of $s$.
+        Defaults to `(1.0,)`.
 
     Raises
     ------
@@ -396,6 +402,10 @@ class TransferFunction(LinearTimeInvariant):
         num_latex = _format_poly_latex(self._num)
         den_latex = _format_poly_latex(self._den)
         return f"$$\\frac{{{num_latex}}}{{{den_latex}}}$$"
+
+    def _repr_markdown_(self) -> str:
+        """Return a Markdown representation for Jupyter environments."""
+        return self._repr_latex_()
 
 
 # Convenient alias
