@@ -97,6 +97,8 @@ nav:
       - "Case Study: Routh-Hurwitz Array": tutorials/pedagogical_01_routh_hurwitz.ipynb
       - Analytical Root Locus Rules: pedagogical/root_locus.md
       - "Case Study: Root Locus Rules": tutorials/pedagogical_02_root_locus.ipynb
+      - State-Space Canonical Forms & Controllability: pedagogical/state_space.md
+      - "Case Study: State-Space Tutor": tutorials/pedagogical_03_state_space.ipynb
 
 
   - API Reference:

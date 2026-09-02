@@ -27,4 +27,20 @@
         - steady_state_analysis
         - SteadyStateResult
 
+## State-Space Canonical Forms & Controllability/Observability Tutor
+
+::: ctrlpy.symbolic.state_space
+    options:
+      members:
+        - StateSpaceTutor
+        - CanonicalFormResult
+        - ModeAnalysis
+        - state_space_tutor
+        - controllable_canonical_form
+        - observable_canonical_form
+        - jordan_canonical_form
+        - controllability_matrix
+        - observability_matrix
+
+
 

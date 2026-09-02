@@ -9,11 +9,20 @@ import sympy as sp
 
 import ctrlpy as cp
 from ctrlpy.pedagogy import (
+    CanonicalFormResult,
+    ModeAnalysis,
     RootLocusRulesResult,
     RouthResult,
+    StateSpaceTutor,
     SteadyStateResult,
+    controllability_matrix,
+    controllable_canonical_form,
+    jordan_canonical_form,
+    observability_matrix,
+    observable_canonical_form,
     root_locus_rules,
     routh_table,
+    state_space_tutor,
     steady_state_analysis,
 )
 
@@ -298,3 +307,37 @@ class TestPedagogyEdgeCases:
     def test_steady_state_invalid_type(self) -> None:
         with pytest.raises(TypeError):
             steady_state_analysis("not_a_system")
+
+
+class TestStateSpacePedagogy:
+    """Test suite for state-space pedagogical tools exported in ctrlpy.pedagogy."""
+
+    def test_facade_exports(self) -> None:
+        A = [[0, 1], [-2, -3]]
+        B = [[0], [1]]
+        C = [[1, 0]]
+        D = [[0]]
+
+        tutor = state_space_tutor(A, B, C, D)
+        assert isinstance(tutor, StateSpaceTutor)
+        assert tutor.is_controllable is True
+        assert tutor.is_observable is True
+        assert isinstance(tutor.modes[0], ModeAnalysis)
+
+        ccf = controllable_canonical_form(A, B, C, D)
+        assert isinstance(ccf, CanonicalFormResult)
+        assert ccf.is_valid is True
+
+        ocf = observable_canonical_form(A, B, C, D)
+        assert isinstance(ocf, CanonicalFormResult)
+        assert ocf.is_valid is True
+
+        jcf = jordan_canonical_form(A, B, C, D)
+        assert isinstance(jcf, CanonicalFormResult)
+        assert jcf.is_valid is True
+
+        c_mat = controllability_matrix(A, B)
+        assert c_mat == sp.Matrix([[0, 1], [1, -3]])
+
+        o_mat = observability_matrix(A, C)
+        assert o_mat == sp.Matrix([[1, 0], [0, 1]])

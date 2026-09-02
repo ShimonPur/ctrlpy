@@ -19,13 +19,33 @@ from ctrlpy.symbolic.root_locus import (
     root_locus_rules,
 )
 from ctrlpy.symbolic.routh import RouthArray, RouthResult, routh_array, routh_table
+from ctrlpy.symbolic.state_space import (
+    CanonicalFormResult,
+    ModeAnalysis,
+    StateSpaceTutor,
+    controllability_matrix,
+    controllable_canonical_form,
+    jordan_canonical_form,
+    observability_matrix,
+    observable_canonical_form,
+    state_space_tutor,
+)
 
 __all__ = [
+    "CanonicalFormResult",
+    "ModeAnalysis",
     "RootLocusRules",
     "RootLocusRulesResult",
     "RouthArray",
     "RouthResult",
+    "StateSpaceTutor",
+    "controllability_matrix",
+    "controllable_canonical_form",
+    "jordan_canonical_form",
+    "observability_matrix",
+    "observable_canonical_form",
     "root_locus_rules",
     "routh_array",
     "routh_table",
+    "state_space_tutor",
 ]
