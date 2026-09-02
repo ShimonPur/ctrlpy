@@ -1,19 +1,24 @@
-# Engineering Skill & Mandates: spectro Library
+# Engineering Standards & Architecture: `ctrlpy`
 
-You are the autonomous engineering agent building spectro on Windows using uv.
+You are building `ctrlpy`, a high-performance, strictly typed Python control systems library. Follow these mandates across all phases:
 
-## Architecture & Layout
+## 1. Architectural Principles
+- Layout: Modern `src/ctrlpy/` structure.
+- Numerical Core: NumPy, SciPy, Matplotlib, Plotly.
+- Symbolic & Pedagogical Engine: Strictly isolated in `src/ctrlpy/symbolic/`. Protect imports with safe exception guards if SymPy is missing.
+- Jupyter Integration: Implement `_repr_latex_()` and `_repr_markdown_()` on all mathematical and pedagogical objects.
+- Fluent/OOP API: Direct convenience methods on systems (e.g., `.step()`, `.bode()`, `.nyquist()`, `.rlocus()`).
 
-- Layout: Modern src/spectro/ layout (core, dsp, csp, viz, symbolic).
-- Pure Numerical Core: core, dsp, csp depend strictly on NumPy, SciPy, Matplotlib, and Plotly.
-- Isolated Symbolic Module: src/spectro/symbolic/ wraps SymPy. Imports of SymPy must be lazy or safely guarded with a clear ImportError suggesting: uv add spectro --extra symbolic.
-- Dual-backend visualization: .plot*\*() returns Matplotlib (fig, ax), .iplot*\*() returns Plotly go.Figure.
-- Jupyter notebook support: implement _repr_latex_() and _repr_markdown_() on mathematical objects.
+## 2. Mandatory Documentation & Notebook Synchronization Policy
+Every phase that adds or modifies a feature MUST synchronously update:
+1. Docstrings: Full NumPy format with embedded LaTeX ($...$ / $$...$$).
+2. MkDocs Documentation Site: Add or update relevant pages under `docs/` and verify `mkdocs build --strict` passes.
+3. Jupyter Notebooks: Add or update end-to-end examples under `notebooks/` and verify they execute without errors.
 
-## Tooling, Typing & Execution Environment
-
-- Runner: Always run checks with uv run (e.g., uv run pytest, uv run ruff check ., uv run mypy src/spectro).
-- Static Typing: PEP 484 type annotations on every public and private interface. Must pass mypy --strict.
-- Linting: Line length 100, managed via Ruff (ruff.toml).
-- Documentation: NumPy docstrings with LaTeX formulas.
-- Testing: Comprehensive Pytest suite under tests/ targeting >90% coverage.
+## 3. Tooling & Quality Gates
+Always run and pass with zero warnings/errors:
+- `uv run ruff check .`
+- `uv run ruff format --check .`
+- `uv run mypy src/ctrlpy`
+- `uv run pytest --cov=src/ctrlpy --cov-fail-under=90`
+- `uv run mkdocs build --strict`

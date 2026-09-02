@@ -1,20 +1,30 @@
 # Pedagogical & Educational Derivations
 
-::: ctrlpy.pedagogy.routh
-    options:
-      members:
-        - routh_table
-        - RouthResult
+## Routh-Hurwitz Stability Engine
 
-::: ctrlpy.pedagogy.root_locus_rules
+::: ctrlpy.symbolic.routh
     options:
       members:
-        - root_locus_rules
+        - RouthArray
+        - RouthResult
+        - routh_array
+        - routh_table
+
+## Analytical Root Locus Rules
+
+::: ctrlpy.symbolic.root_locus
+    options:
+      members:
+        - RootLocusRules
         - RootLocusRulesResult
+        - root_locus_rules
+
+## Steady-State Error & Static Constants
 
 ::: ctrlpy.pedagogy.steady_state
     options:
       members:
         - steady_state_analysis
         - SteadyStateResult
+
 

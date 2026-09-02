@@ -1,27 +1,31 @@
-"""Pedagogical and symbolic tools for control systems analysis."""
+"""Symbolic and pedagogical control systems analysis engine."""
+
+from __future__ import annotations
 
 try:
     import sympy  # noqa: F401
 except ImportError:
     raise ImportError(
-        "The 'ctrlpy.pedagogy' submodule requires SymPy.\n"
+        "The 'ctrlpy.symbolic' submodule requires SymPy.\n"
         "Please install it with:\n"
         '    pip install "ctrlpy[symbolic]@git+https://github.com/ShimonPur/ctrlpy.git"\n'
         "or with uv:\n"
         "    uv add git+https://github.com/ShimonPur/ctrlpy.git --extra symbolic"
     ) from None
 
-from ctrlpy.pedagogy.root_locus_rules import RootLocusRulesResult, root_locus_rules
-from ctrlpy.pedagogy.routh import RouthArray, RouthResult, routh_array, routh_table
-from ctrlpy.pedagogy.steady_state import SteadyStateResult, steady_state_analysis
+from ctrlpy.symbolic.root_locus import (
+    RootLocusRules,
+    RootLocusRulesResult,
+    root_locus_rules,
+)
+from ctrlpy.symbolic.routh import RouthArray, RouthResult, routh_array, routh_table
 
 __all__ = [
+    "RootLocusRules",
     "RootLocusRulesResult",
     "RouthArray",
     "RouthResult",
-    "SteadyStateResult",
     "root_locus_rules",
     "routh_array",
     "routh_table",
-    "steady_state_analysis",
 ]

@@ -92,6 +92,13 @@ nav:
       - 03. Mass-Spring-Damper PID Tuning: tutorials/03_mass_spring_damper.ipynb
       - 04. Frequency Domain & Stability Margins: tutorials/04_frequency_domain_deep_dive.ipynb
       - 05. Pedagogical & Symbolic Control Tools: tutorials/05_pedagogical_and_symbolic_tools.ipynb
+  - Pedagogical Tools:
+      - Routh-Hurwitz Stability Criterion: pedagogical/routh_hurwitz.md
+      - "Case Study: Routh-Hurwitz Array": tutorials/pedagogical_01_routh_hurwitz.ipynb
+      - Analytical Root Locus Rules: pedagogical/root_locus.md
+      - "Case Study: Root Locus Rules": tutorials/pedagogical_02_root_locus.ipynb
+
+
   - API Reference:
       - Overview: api/index.md
       - LTI Models: api/models.md
@@ -102,4 +109,5 @@ nav:
       - Visualization Engine: api/plotting.md
       - Pedagogical Tools: api/pedagogy.md
       - Exceptions: api/exceptions.md
+
 

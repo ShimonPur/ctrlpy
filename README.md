@@ -75,7 +75,9 @@ ctrlpy/
 │   ├── 02_dc_motor_control.ipynb               # DC motor speed control & PI design
 │   ├── 03_mass_spring_damper.ipynb             # Mechanical oscillator & Root Locus PID tuning
 │   ├── 04_frequency_domain_deep_dive.ipynb     # Bode margins, Nyquist criteria & indented contours
-│   └── 05_pedagogical_and_symbolic_tools.ipynb # Routh tables, Root Locus rules, and steady-state error
+│   ├── 05_pedagogical_and_symbolic_tools.ipynb # Routh tables, Root Locus rules, and steady-state error
+│   ├── pedagogical_01_routh_hurwitz.ipynb      # Step-by-step Routh-Hurwitz array & parametric gain K
+│   └── pedagogical_02_root_locus.ipynb         # Analytical Evans Root Locus rules & geometric derivations
 ├── src/
 │   └── ctrlpy/
 │       ├── __init__.py        # Root public API exports (Pure numerical)
@@ -84,15 +86,12 @@ ctrlpy/
 │       ├── exceptions.py      # Custom exception hierarchy
 │       ├── freq_domain.py     # Frequency responses & exact stability margins
 │       ├── models/            # LTI base class, TransferFunction, and StateSpace
-│       ├── pedagogy/          # Optional symbolic & pedagogical module (SymPy)
-│       │   ├── __init__.py    # Submodule exports & defensive import guard
-│       │   ├── root_locus_rules.py # Analytical Evans Root Locus rules
-│       │   ├── routh.py       # Routh-Hurwitz criterion & parametric K-solver
-│       │   └── steady_state.py # System Type & static error constants
+│       ├── pedagogy/          # Educational tools (Routh, Root Locus rules, Steady-State error)
 │       ├── plotting.py        # Static Matplotlib plotting routines
 │       ├── plotting_plotly.py # Interactive Plotly visualization engine
 │       ├── py.typed           # PEP 561 typing marker
 │       ├── simulation_results.py # Typed TimeResponseData container & metric extraction
+│       ├── symbolic/          # Isolated symbolic engine (SymPy), RouthArray & RootLocusRules
 │       └── time_domain.py     # Vectorized step, impulse, and forced response solvers
 ├── tests/                     # Comprehensive test suite (>90% coverage)
 ├── mkdocs.yml                 # MkDocs configuration with MathJax 3 & Material theme
