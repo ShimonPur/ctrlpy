@@ -7,6 +7,7 @@ Welcome to the `ctrlpy` API reference documentation.
 | Module | Description |
 | :--- | :--- |
 | [`ctrlpy.models`](models.md) | Linear Time-Invariant (LTI) base classes, `TransferFunction`, and `StateSpace`. |
+| [`ctrlpy.core.discrete`](discrete.md) | Discrete-time LTI systems, z-domain transfer functions, and discretization methods. |
 | [`ctrlpy.algebra`](algebra.md) | Block diagram algebra (`series`, `parallel`, `feedback`). |
 | [`ctrlpy.time_domain`](time_domain.md) | Step, impulse, and forced response solvers and `TimeResponseData`. |
 | [`ctrlpy.freq_domain`](freq_domain.md) | Frequency responses (`bode_data`, `nyquist_data`, `root_locus_data`, `margin`). |

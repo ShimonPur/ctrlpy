@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from matplotlib.axes import Axes
     from matplotlib.figure import Figure
 
+    from ctrlpy.core.discrete import DiscreteTransferFunction
     from ctrlpy.freq_domain import (
         BodeData,
         NyquistData,
@@ -64,6 +65,95 @@ class LinearTimeInvariant(ABC):
             True if inputs == 1 and outputs == 1, False otherwise.
         """
         return self.inputs == 1 and self.outputs == 1
+
+    @property
+    def is_discrete(self) -> bool:
+        """Whether the system is discrete-time (always False for continuous LTI).
+
+        Returns
+        -------
+        bool
+            False for continuous-time systems.
+        """
+        return False
+
+    def c2d(
+        self,
+        dt: float,
+        method: Literal[
+            "zoh",
+            "zero_order_hold",
+            "foh",
+            "first_order_hold",
+            "tustin",
+            "bilinear",
+            "prewarping",
+            "tustin_prewarp",
+            "bilinear_prewarp",
+            "matched",
+        ] = "zoh",
+        prewarp_frequency: float | None = None,
+        w_warp: float | None = None,
+    ) -> DiscreteTransferFunction:
+        """Discretize the continuous-time LTI system into a discrete-time TransferFunction.
+
+        Parameters
+        ----------
+        dt : float
+            Sampling time Ts in seconds (must be strictly positive).
+        method : {"zoh", "foh", "tustin", "bilinear", "prewarping", "matched"}, optional
+            Discretization method, default is "zoh".
+        prewarp_frequency : float | None, optional
+            Pre-warping frequency in rad/s for Tustin pre-warping.
+        w_warp : float | None, optional
+            Alias for prewarp_frequency.
+
+        Returns
+        -------
+        DiscreteTransferFunction
+            Discretized transfer function H(z).
+        """
+        from ctrlpy.core.discrete import c2d
+
+        return c2d(self, dt=dt, method=method, prewarp_frequency=prewarp_frequency, w_warp=w_warp)
+
+    def to_discrete(
+        self,
+        dt: float,
+        method: Literal[
+            "zoh",
+            "zero_order_hold",
+            "foh",
+            "first_order_hold",
+            "tustin",
+            "bilinear",
+            "prewarping",
+            "tustin_prewarp",
+            "bilinear_prewarp",
+            "matched",
+        ] = "zoh",
+        prewarp_frequency: float | None = None,
+        w_warp: float | None = None,
+    ) -> DiscreteTransferFunction:
+        """Alias for c2d(). Discretize the continuous-time LTI system.
+
+        Parameters
+        ----------
+        dt : float
+            Sampling time Ts in seconds.
+        method : {"zoh", "foh", "tustin", "bilinear", "prewarping", "matched"}, optional
+            Discretization method, default is "zoh".
+        prewarp_frequency : float | None, optional
+            Pre-warping frequency in rad/s.
+        w_warp : float | None, optional
+            Alias for prewarp_frequency.
+
+        Returns
+        -------
+        DiscreteTransferFunction
+            Discretized transfer function H(z).
+        """
+        return self.c2d(dt=dt, method=method, prewarp_frequency=prewarp_frequency, w_warp=w_warp)
 
     @abstractmethod
     def poles(self) -> NDArray[np.complex128]:

@@ -599,6 +599,8 @@ def iplot_impulse(
     return fig
 
 
+from ctrlpy.core.discrete import iplot_pzmap, plot_pzmap_plotly
+
 # Convenient aliases
 plot_step_plotly = iplot_step
 plot_impulse_plotly = iplot_impulse
@@ -610,11 +612,13 @@ __all__ = [
     "iplot_bode",
     "iplot_impulse",
     "iplot_nyquist",
+    "iplot_pzmap",
     "iplot_root_locus",
     "iplot_step",
     "plot_bode_plotly",
     "plot_impulse_plotly",
     "plot_nyquist_plotly",
+    "plot_pzmap_plotly",
     "plot_root_locus_plotly",
     "plot_step_plotly",
 ]

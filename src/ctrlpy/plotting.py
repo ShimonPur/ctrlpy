@@ -421,3 +421,15 @@ def plot_impulse(
     ax_out.legend(loc="best")
 
     return fig, ax_out
+
+
+from ctrlpy.core.discrete import plot_pzmap
+
+__all__ = [
+    "plot_bode",
+    "plot_impulse",
+    "plot_nyquist",
+    "plot_pzmap",
+    "plot_root_locus",
+    "plot_step",
+]

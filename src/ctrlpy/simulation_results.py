@@ -92,18 +92,26 @@ class TimeResponseData:
         raise ValueError(f"Output array has unsupported dimension {self.y.ndim}.")
 
     def _check_stability(self) -> None:
-        """Check if the system has poles in the Right Half Plane and raise UnstableSystemError."""
+        """Check if the system is unstable and raise UnstableSystemError."""
         poles = self.poles
         if poles is None and self.sys is not None:
             poles = self.sys.poles()
 
         if poles is not None and len(poles) > 0:
-            unstable = [p for p in poles if np.real(p) > 1e-6]
-            if len(unstable) > 0:
-                raise UnstableSystemError(
-                    f"Cannot calculate transient response metrics for an unstable system. "
-                    f"System has pole(s) in the Right-Half Plane (Re(p) > 0): {unstable}"
-                )
+            if getattr(self.sys, "is_discrete", False):
+                unstable = [p for p in poles if np.abs(p) > 1.0 + 1e-6]
+                if len(unstable) > 0:
+                    raise UnstableSystemError(
+                        f"Cannot calculate transient response metrics for an unstable discrete system. "
+                        f"System has pole(s) outside the unit circle (|p| > 1): {unstable}"
+                    )
+            else:
+                unstable = [p for p in poles if np.real(p) > 1e-6]
+                if len(unstable) > 0:
+                    raise UnstableSystemError(
+                        f"Cannot calculate transient response metrics for an unstable system. "
+                        f"System has pole(s) in the Right-Half Plane (Re(p) > 0): {unstable}"
+                    )
 
     def steady_state_value(self, channel: int = 0) -> float:
         r"""Compute the final steady-state response value $y_{ss}$.

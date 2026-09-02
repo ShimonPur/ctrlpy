@@ -86,12 +86,15 @@ plugins:
 nav:
   - Home: index.md
   - Getting Started: getting_started.md
+  - User Guide:
+      - Discrete-Time Systems & z-Domain: user_guide/discrete_systems.md
   - Tutorials:
       - 01. Quickstart Guide: tutorials/01_quickstart.ipynb
       - 02. DC Motor Speed Control: tutorials/02_dc_motor_control.ipynb
       - 03. Mass-Spring-Damper PID Tuning: tutorials/03_mass_spring_damper.ipynb
       - 04. Frequency Domain & Stability Margins: tutorials/04_frequency_domain_deep_dive.ipynb
       - 05. Pedagogical & Symbolic Control Tools: tutorials/05_pedagogical_and_symbolic_tools.ipynb
+      - 06. Discrete Control & z-Plane Analysis: tutorials/06_discrete_control_z_plane.ipynb
   - Pedagogical Tools:
       - Routh-Hurwitz Stability Criterion: pedagogical/routh_hurwitz.md
       - "Case Study: Routh-Hurwitz Array": tutorials/pedagogical_01_routh_hurwitz.ipynb
@@ -100,10 +103,10 @@ nav:
       - State-Space Canonical Forms & Controllability: pedagogical/state_space.md
       - "Case Study: State-Space Tutor": tutorials/pedagogical_03_state_space.ipynb
 
-
   - API Reference:
       - Overview: api/index.md
       - LTI Models: api/models.md
+      - Discrete Systems: api/discrete.md
       - Block Diagram Algebra: api/algebra.md
       - Time-Domain Simulation: api/time_domain.md
       - Frequency-Domain Analysis: api/freq_domain.md
